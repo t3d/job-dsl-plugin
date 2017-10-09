@@ -159,6 +159,17 @@ class GitExtensionContext extends AbstractExtensibleContext {
     }
 
     /**
+     * Sets unique name for SCM (Useful when using Multi SCM plugin).
+     */
+    void scmName(String name) {
+        extensions << NodeBuilder.newInstance().'hudson.plugins.git.extensions.impl.ScmName' {
+            if (name) {
+                delegate.scmName(name)
+            }
+        }
+    }
+
+    /**
      * Sets the strategy that Jenkins will use to choose what branches to build in what order.
      */
     void choosingStrategy(@DslContext(StrategyContext) Closure strategyClosure) {

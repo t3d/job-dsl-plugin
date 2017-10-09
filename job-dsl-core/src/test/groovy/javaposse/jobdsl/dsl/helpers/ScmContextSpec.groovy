@@ -1050,6 +1050,27 @@ class ScmContextSpec extends Specification {
         (1.._) * mockJobManagement.requireMinimumPluginVersion('git', '2.5.3')
     }
 
+    def 'call git scm method with scm name'() {
+        when:
+        context.git {
+            remote {
+                url('https://github.com/jenkinsci/job-dsl-plugin.git')
+            }
+            extensions {
+                scmName('highly sophisticated name')
+            }
+        }
+
+        then:
+        context.scmNodes[0] != null
+        with(context.scmNodes[0]) {
+            extensions.size() == 1
+            extensions[0].children().size() == 1
+            extensions[0].children()[0].name() == 'hudson.plugins.git.extensions.impl.ScmName'
+        }
+        1 * mockJobManagement.requireMinimumPluginVersion('git', '2.5.3')
+    }
+
     def 'call github scm method'() {
         when:
         context.github('jenkinsci/job-dsl-plugin')
